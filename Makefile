@@ -19,6 +19,9 @@ docker-pull:
 docker-build:
 	docker-compose build --build-arg UID=`id -u`
 
+doctrine-fixtures-load:
+	docker-compose run --rm php-cli php bin/console doctrine:fixtures:load --env=dev
+
 db-migrate:
 	docker-compose run --rm php-cli php bin/console doctrine:migrations:migrate --no-interaction
 
