@@ -2,23 +2,22 @@
 
 {% block body %}
 	<div class="container">
-		<ul class="nav nav-tabs" role="tablist" style="margin-bottom: 10px;">
-			<li class="nav-item"><a class="nav-link active" href="#">Список статей</a></li>
-		</ul>
-		
-		<div class="table-responsive table-end">
-			<table class="table table-striped">
-				<thead>
-				<tr>
-					<th>#</th>
-					<th>Название</th>
-					<th>Описание</th>
-					<th>Количество просмотров</th>
-					<th>Дата создания</th>
-				</tr>
-				</thead>
-				<tbody>
-				{% if items|length %}
+		{% if items|length %}
+			<ul class="nav nav-tabs" role="tablist" style="margin-bottom: 10px;">
+				<li class="nav-item"><a class="nav-link active" href="#">Список статей</a></li>
+			</ul>
+			<div class="table-responsive table-end">
+				<table class="table table-striped">
+					<thead>
+					<tr>
+						<th>#</th>
+						<th>Название</th>
+						<th>Описание</th>
+						<th>Количество просмотров</th>
+						<th>Дата создания</th>
+					</tr>
+					</thead>
+					<tbody>
 					{% for item in items %}
 						<tr>
 							<td><a href="{{ path('article_show', {'code': item.code }) }}">{{ item.id }}</a></td>
@@ -29,19 +28,17 @@
 							</td>
 							<td>{{ item.humanReadableViewsCount }}</td>
 							<td nowrap="nowrap">
-								<a href="{{ path('article_show',  { 'code': item.code }) }}" class="btn btn-success fa fa-eye" title="Просмотр">{{ item.createdAt.format('d-m-Y H:i') }}</a>
+								<a href="{{ path('article_show',  { 'code': item.code }) }}"
+								   class="btn btn-success fa fa-eye"
+								   title="Просмотр">{{ item.createdAt.format('d-m-Y H:i') }}</a>
 							</td>
 						</tr>
 					{% endfor %}
-				{% else %}
-					<tr>
-						<td colspan="5">Чтобы загрузить данные выполните из консоли:
-							<bold>make doctrine-fixtures-load</bold>
-						</td>
-					</tr>
-				{% endif %}
-				</tbody>
-			</table>
-		</div>
+					</tbody>
+				</table>
+			</div>
+		{% else %}
+			<h3>Чтобы загрузить данные выполните из консоли: make doctrine-fixtures-load</h3>
+		{% endif %}
 	</div>
 {% endblock %}
