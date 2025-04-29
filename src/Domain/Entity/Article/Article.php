@@ -37,10 +37,12 @@ class Article {
 
 	public function __construct(
 		string $title,
-		?string $description,
+		?string $description = "",
 		bool $isActive = true,
 	) {
 		$this->id = null;
+		$this->code = Uuid::v1();
+
 		$this->edit(
 			title: $title,
 			description: $description,
