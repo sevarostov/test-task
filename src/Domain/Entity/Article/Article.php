@@ -1,14 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Entity\Article;
 
-use App\Infrastructure\Persistence\Doctrine\Repository\Article\ArticleRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
-#[ORM\Entity(repositoryClass: ArticleRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'article')]
 class Article {
 	#[ORM\Id, ORM\Column(type: 'integer', options: ['unsigned' => true]), ORM\GeneratedValue]
@@ -41,7 +42,7 @@ class Article {
 		bool $isActive = true,
 	) {
 		$this->id = null;
-		$this->code = Uuid::v1();
+		$this->code = Uuid::v1()->generate();
 
 		$this->edit(
 			title: $title,
@@ -81,7 +82,7 @@ class Article {
 	}
 
 	public function setCode(): static {
-		$this->code = Uuid::v1();
+		$this->code = Uuid::v1()->generate();
 
 		return $this;
 	}
@@ -90,13 +91,26 @@ class Article {
 		return $this->viewsCount;
 	}
 
+	public function getHumanReadableViewsCount(): string {
+		return match (true) {
+			$this->viewsCount >= 1000000 => "1M+",
+			$this->viewsCount < 1000000 && $this->viewsCount >= 1000 => "1К+",
+			$this->viewsCount < 1000 && $this->viewsCount > 50 => "50+",
+			default => "$this->viewsCount",
+		};
+	}
+
 	public function setViewsCount(int $viewsCount): static {
 		$this->viewsCount = $viewsCount;
 
 		return $this;
 	}
 
-	public function getDescription(): string {
+	public function getDescription($cut = false): string {
+		if ($cut) {
+			return mb_substr(strip_tags($this->description), 0, $cut);
+		}
+
 		return $this->description;
 	}
 

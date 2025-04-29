@@ -1,5 +1,47 @@
 {% extends 'app/base.html.twig' %}
 
 {% block body %}
-    <h3>Теперь осталось сделать тестовое задание :)</h3>
+	<div class="container">
+		<ul class="nav nav-tabs" role="tablist" style="margin-bottom: 10px;">
+			<li class="nav-item"><a class="nav-link active" href="#">Список статей</a></li>
+		</ul>
+		
+		<div class="table-responsive table-end">
+			<table class="table table-striped">
+				<thead>
+				<tr>
+					<th>#</th>
+					<th>Название</th>
+					<th>Описание</th>
+					<th>Количество просмотров</th>
+					<th>Дата создания</th>
+				</tr>
+				</thead>
+				<tbody>
+				{% if items|length %}
+					{% for item in items %}
+						<tr>
+							<td><a href="{{ path('article_show', {'code': item.code }) }}">{{ item.id }}</a></td>
+							<td>{{ item.title }}</td>
+							<td>
+								{{ item.getDescription(300)|raw }}
+								{% if item.getDescription(3011)|length > 300 %}...{% endif %}
+							</td>
+							<td>{{ item.humanReadableViewsCount }}</td>
+							<td nowrap="nowrap">
+								<a href="{{ path('article_show',  { 'code': item.code }) }}" class="btn btn-success fa fa-eye" title="Просмотр">{{ item.createdAt.format('d-m-Y H:i') }}</a>
+							</td>
+						</tr>
+					{% endfor %}
+				{% else %}
+					<tr>
+						<td colspan="5">Чтобы загрузить данные выполните из консоли:
+							<bold>make doctrine-fixtures-load</bold>
+						</td>
+					</tr>
+				{% endif %}
+				</tbody>
+			</table>
+		</div>
+	</div>
 {% endblock %}

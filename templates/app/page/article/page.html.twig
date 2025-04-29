@@ -2,36 +2,22 @@
 
 {% block body %}
     <div class="container">
-        <ul class="nav nav-tabs" role="tablist" style="margin-bottom: 10px;">
-            <li class="nav-item"><a class="nav-link active" href="#">Список статей</a></li>
-        </ul>
-        
-        {% if items|length %}
-            {% for item in items %}
-                <div class="col-12">
-                    <div class="card_body card_body-video">
-                        <a href="#
-{#{{ path('app_frontpage_show', {'id': item.id } ) }}#}
-" class="card_body-link">
-                            <h3 class="card_title">{{ item.title }}</h3>
-                            <p class="card_text">
-                                {{ item.getDescription(300)|raw }}
-                                {% if item.getDescription(3011)|length > 300 %}...{% endif %}</p>
-                        </a>
-                        <div class="card_footer d-flex justify-content-between">
-                            <a href="
-{#{{ path('app_frontpage_show', {'id': item.id } ) }}#}
-" class="btn_card">Читать подробнее<span></span></a>
-                            <div class="card_info d-flex align-items-center like">
-                                <p class="card_info-date">{{ item.humanReadableViewsCount }}</p>
-                                <p class="card_info-date">{{ item.createdAt.format('d-m-Y H:i') }}</p>
-                            </div>
-                        </div>
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ path('app_frontpage') }}">К списку</a></li>
+                </ol>
+            </nav>
+            <div class="card_body">
+                    <h3 class="card_title">{{ item.title }}</h3>
+                    <p class="card_text">{{ item.getDescription}}</p>
+                <div class="card_footer d-flex justify-content-between">
+                    <div class="card_info d-flex align-items-center like">
+                        <p class="card_info-date">Количество просмотров: {{ item.humanReadableViewsCount }}</p>
+                        <p class="card_info-date">Дата создания: {{ item.createdAt.format('d-m-Y H:i') }}</p>
                     </div>
                 </div>
-            {% endfor %}
-        {% else %}
-            <div class="well">Чтобы загрузить данные выполните из консоли: <bold>make doctrine-fixtures-load</bold></div>
-        {% endif %}
+            </div>
+        </div>
     </div>
 {% endblock %}
